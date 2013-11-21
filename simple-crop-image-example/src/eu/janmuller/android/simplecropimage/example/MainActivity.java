@@ -1,11 +1,5 @@
 package eu.janmuller.android.simplecropimage.example;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -20,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import eu.janmuller.android.simplecropimage.CropImageActivity;
 
+import java.io.*;
+
 public class MainActivity extends Activity {
 
     public static final String TAG = "MainActivity";
@@ -32,6 +28,8 @@ public class MainActivity extends Activity {
 
     private ImageView mImageView;
     private File      mFileTemp;
+
+    private CropImageActivity.CropStyle cropStyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +49,22 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
 
+                takePicture();
+            }
+        });
+
+        findViewById(R.id.square_photo_from_gallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cropStyle = CropImageActivity.CropStyle.SQUARE;
+                openGallery();
+            }
+        });
+
+        findViewById(R.id.square_photo_from_take_picture).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cropStyle = CropImageActivity.CropStyle.STANDARD;
                 takePicture();
             }
         });
@@ -99,7 +113,7 @@ public class MainActivity extends Activity {
         startActivityForResult(photoPickerIntent, REQUEST_CODE_GALLERY);
     }
 
-    private void startCropImage() {
+    private void startCropImage(CropImageActivity.CropStyle cropStyle) {
 
         Intent intent = new Intent(this, CropImageActivity.class);
         intent.putExtra(CropImageActivity.IMAGE_PATH, mFileTemp.getPath());
@@ -107,6 +121,7 @@ public class MainActivity extends Activity {
 
         intent.putExtra(CropImageActivity.ASPECT_X, 3);
         intent.putExtra(CropImageActivity.ASPECT_Y, 2);
+        intent.putExtra(CropImageActivity.CROP_STYLE, cropStyle);
 
         startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
     }
@@ -133,7 +148,7 @@ public class MainActivity extends Activity {
                     fileOutputStream.close();
                     inputStream.close();
 
-                    startCropImage();
+                    startCropImage(cropStyle);
 
                 } catch (Exception e) {
 
@@ -143,7 +158,7 @@ public class MainActivity extends Activity {
                 break;
             case REQUEST_CODE_TAKE_PICTURE:
 
-                startCropImage();
+                startCropImage(cropStyle);
                 break;
             case REQUEST_CODE_CROP_IMAGE:
 

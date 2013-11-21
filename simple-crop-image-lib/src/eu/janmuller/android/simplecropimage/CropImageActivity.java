@@ -56,6 +56,7 @@ public class CropImageActivity extends MonitoredActivity {
     public static final  String RETURN_DATA            = "return-data";
     public static final  String RETURN_DATA_AS_BITMAP  = "data";
     public static final  String ACTION_INLINE_DATA     = "inline-data";
+    public static final  String CROP_STYLE = "cropStyle";
 
     // These are various options can be specified in the intent.
     private       Bitmap.CompressFormat mOutputFormat    = Bitmap.CompressFormat.JPEG;
@@ -84,6 +85,13 @@ public class CropImageActivity extends MonitoredActivity {
 
     private final BitmapManager.ThreadSet mDecodingThreads =
             new BitmapManager.ThreadSet();
+
+    public enum CropStyle {
+        STANDARD,
+        SQUARE
+    }
+
+    private CropStyle cropStyle = CropStyle.STANDARD;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -131,6 +139,11 @@ public class CropImageActivity extends MonitoredActivity {
             } else {
 
                 throw new IllegalArgumentException("aspect_y must be integer");
+            }
+            if (extras.containsKey(CROP_STYLE) && extras.get(CROP_STYLE) instanceof CropStyle) {
+                setCropStyle((CropStyle)extras.get(CROP_STYLE));
+
+                Log.d(SimpleCropImage.TAG, "Crop Style: " + getCropStyle());
             }
             mOutputX = extras.getInt(OUTPUT_X);
             mOutputY = extras.getInt(OUTPUT_Y);
@@ -530,7 +543,19 @@ public class CropImageActivity extends MonitoredActivity {
             int x = (width - cropWidth) / 2;
             int y = (height - cropHeight) / 2;
 
-            RectF cropRect = new RectF(x, y, x + cropWidth, y + cropHeight);
+            RectF cropRect = null;
+            switch (getCropStyle()) {
+                case STANDARD: {
+                    cropRect = new RectF(x, y, x + cropWidth, y + cropHeight);
+                    break;
+                }
+                case SQUARE: {
+                    int shortestLength = Math.min(cropWidth, cropHeight);
+                    cropRect = new RectF(x, y, x + shortestLength, y + shortestLength);
+                    break;
+                }
+            }
+
             hv.setup(mImageMatrix, imageRect, cropRect, mCircleCrop,
                     mAspectX != 0 && mAspectY != 0);
 
@@ -660,7 +685,13 @@ public class CropImageActivity extends MonitoredActivity {
         }
     }
 
+    public CropStyle getCropStyle() {
+        return cropStyle;
+    }
 
+    public void setCropStyle(CropStyle cropStyle) {
+        this.cropStyle = cropStyle;
+    }
 }
 
 
