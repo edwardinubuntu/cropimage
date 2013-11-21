@@ -17,6 +17,7 @@
 package eu.janmuller.android.simplecropimage;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -59,21 +60,21 @@ public class CropImageActivity extends MonitoredActivity {
     public static final  String CROP_STYLE = "cropStyle";
 
     // These are various options can be specified in the intent.
-    private       Bitmap.CompressFormat mOutputFormat    = Bitmap.CompressFormat.JPEG;
-    private       Uri                   mSaveUri         = null;
+    protected        Bitmap.CompressFormat mOutputFormat    = Bitmap.CompressFormat.JPEG;
+    protected        Uri                   mSaveUri         = null;
     private       boolean               mDoFaceDetection = true;
-    private       boolean               mCircleCrop      = false;
+    protected        boolean               mCircleCrop      = false;
     private final Handler               mHandler         = new Handler();
 
-    private int             mAspectX;
-    private int             mAspectY;
-    private int             mOutputX;
-    private int             mOutputY;
-    private boolean         mScale;
+    protected int             mAspectX;
+    protected int             mAspectY;
+    protected int             mOutputX;
+    protected int             mOutputY;
+    protected boolean         mScale;
     protected CropImageView   mImageView;
-    private ContentResolver mContentResolver;
-    private Bitmap          mBitmap;
-    private String          mImagePath;
+    protected ContentResolver mContentResolver;
+    protected Bitmap          mBitmap;
+    protected String          mImagePath;
 
     public boolean       mWaitingToPick; // Whether we are wait the user to pick a face.
     public boolean       mSaving;  // Whether the "save" button is already clicked.
@@ -81,7 +82,7 @@ public class CropImageActivity extends MonitoredActivity {
 
     // These options specifiy the output image size and whether we should
     // scale the output to fit it (or just crop it).
-    private boolean mScaleUp = true;
+    protected boolean mScaleUp = true;
 
     private final BitmapManager.ThreadSet mDecodingThreads =
             new BitmapManager.ThreadSet();
@@ -93,6 +94,7 @@ public class CropImageActivity extends MonitoredActivity {
 
     private CropStyle cropStyle = CropStyle.STANDARD;
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreate(Bundle icicle) {
 
@@ -112,9 +114,9 @@ public class CropImageActivity extends MonitoredActivity {
 
             if (extras.getString(CIRCLE_CROP) != null) {
 
-        	if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
-            		mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        	}
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
+                    mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                }
 
                 mCircleCrop = true;
                 mAspectX = 1;
@@ -409,7 +411,7 @@ public class CropImageActivity extends MonitoredActivity {
         }
     }
 
-    private void saveOutput(Bitmap croppedImage) {
+    protected void saveOutput(Bitmap croppedImage) {
 
         if (mSaveUri != null) {
             OutputStream outputStream = null;
@@ -664,14 +666,14 @@ public class CropImageActivity extends MonitoredActivity {
             /*if (!ImageManager.hasStorage()) {
                 return NO_STORAGE_ERROR;
             } else {*/
-        	String storageDirectory = "";
-        	String state = Environment.getExternalStorageState();
-        	if (Environment.MEDIA_MOUNTED.equals(state)) {
-        		storageDirectory = Environment.getExternalStorageDirectory().toString();
-        	}
-        	else {
-        		storageDirectory = activity.getFilesDir().toString();
-        	}
+            String storageDirectory = "";
+            String state = Environment.getExternalStorageState();
+            if (Environment.MEDIA_MOUNTED.equals(state)) {
+                storageDirectory = Environment.getExternalStorageDirectory().toString();
+            }
+            else {
+                storageDirectory = activity.getFilesDir().toString();
+            }
             StatFs stat = new StatFs(storageDirectory);
             float remaining = ((float) stat.getAvailableBlocks()
                     * (float) stat.getBlockSize()) / 400000F;
