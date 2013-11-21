@@ -60,15 +60,7 @@ public abstract class TouchBaseImageView extends ImageView {
 
     int mThisWidth = -1, mThisHeight = -1;
 
-    public float mMaxZoom;
-
-    public int mLeft;
-
-    public int mRight;
-
-    public int mTop;
-
-    public int mBottom;
+    private float maxZoom;
 
     // TouchBaseImageView will pass a Bitmap to the Recycler if it has finished
     // its use of that Bitmap.
@@ -89,10 +81,12 @@ public abstract class TouchBaseImageView extends ImageView {
                             int right, int bottom) {
 
         super.onLayout(changed, left, top, right, bottom);
-        mLeft = left;
-        mRight = right;
-        mTop = top;
-        mBottom = bottom;
+
+        setTop(top);
+        setBottom(bottom);
+        setLeft(left);
+        setRight(right);
+
         mThisWidth = right - left;
         mThisHeight = bottom - top;
         Runnable r = mOnLayoutRunnable;
@@ -185,7 +179,7 @@ public abstract class TouchBaseImageView extends ImageView {
             mSuppMatrix.reset();
         }
         setImageMatrix(getImageViewMatrix());
-        mMaxZoom = maxZoom();
+        maxZoom = maxZoom();
     }
 
     // Center as much as possible in one or both axis.  Centering is
@@ -326,8 +320,8 @@ public abstract class TouchBaseImageView extends ImageView {
 
     protected void zoomTo(float scale, float centerX, float centerY) {
 
-        if (scale > mMaxZoom) {
-            scale = mMaxZoom;
+        if (scale > maxZoom) {
+            scale = maxZoom;
         }
 
         float oldScale = getScale();
@@ -380,7 +374,7 @@ public abstract class TouchBaseImageView extends ImageView {
 
     protected void zoomIn(float rate) {
 
-        if (getScale() >= mMaxZoom) {
+        if (getScale() >= maxZoom) {
             return;     // Don't let the user zoom into the molecular level.
         }
         if (mBitmapDisplayed.getBitmap() == null) {

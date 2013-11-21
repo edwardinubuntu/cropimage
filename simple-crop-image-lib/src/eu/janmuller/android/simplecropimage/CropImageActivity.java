@@ -534,7 +534,7 @@ public class CropImageActivity extends MonitoredActivity {
             hv.setup(mImageMatrix, imageRect, cropRect, mCircleCrop,
                     mAspectX != 0 && mAspectY != 0);
 
-            mImageView.mHighlightViews.clear(); // Thong added for rotate
+            mImageView.getHighlightViews().clear(); // Thong added for rotate
 
             mImageView.add(hv);
         }
@@ -585,8 +585,8 @@ public class CropImageActivity extends MonitoredActivity {
                         makeDefault();
                     }
                     mImageView.invalidate();
-                    if (mImageView.mHighlightViews.size() == 1) {
-                        mCrop = mImageView.mHighlightViews.get(0);
+                    if (mImageView.getHighlightViews().size() == 1) {
+                        mCrop = mImageView.getHighlightViews().get(0);
                         mCrop.setFocus(true);
                     }
 

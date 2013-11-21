@@ -11,11 +11,10 @@ import java.util.ArrayList;
 
 public class CropImageView extends TouchBaseImageView {
 
-    public ArrayList<HighlightView> mHighlightViews      = new ArrayList<HighlightView>();
-    public HighlightView            mMotionHighlightView = null;
-    float mLastX, mLastY;
-    int mMotionEdge;
-
+    private ArrayList<HighlightView> highlightViews = new ArrayList<HighlightView>();
+    private HighlightView motionHighlightView = null;
+    private float mLastX, mLastY;
+    private int mMotionEdge;
     private Context mContext;
 
     @Override
@@ -24,7 +23,7 @@ public class CropImageView extends TouchBaseImageView {
 
         super.onLayout(changed, left, top, right, bottom);
         if (mBitmapDisplayed.getBitmap() != null) {
-            for (HighlightView hv : mHighlightViews) {
+            for (HighlightView hv : highlightViews) {
                 hv.mMatrix.set(getImageMatrix());
                 hv.invalidate();
                 if (hv.mIsFocused) {
@@ -44,7 +43,7 @@ public class CropImageView extends TouchBaseImageView {
     protected void zoomTo(float scale, float centerX, float centerY) {
 
         super.zoomTo(scale, centerX, centerY);
-        for (HighlightView hv : mHighlightViews) {
+        for (HighlightView hv : highlightViews) {
             hv.mMatrix.set(getImageMatrix());
             hv.invalidate();
         }
@@ -54,7 +53,7 @@ public class CropImageView extends TouchBaseImageView {
     protected void zoomIn() {
 
         super.zoomIn();
-        for (HighlightView hv : mHighlightViews) {
+        for (HighlightView hv : highlightViews) {
             hv.mMatrix.set(getImageMatrix());
             hv.invalidate();
         }
@@ -64,7 +63,7 @@ public class CropImageView extends TouchBaseImageView {
     protected void zoomOut() {
 
         super.zoomOut();
-        for (HighlightView hv : mHighlightViews) {
+        for (HighlightView hv : highlightViews) {
             hv.mMatrix.set(getImageMatrix());
             hv.invalidate();
         }
@@ -74,8 +73,8 @@ public class CropImageView extends TouchBaseImageView {
     protected void postTranslate(float deltaX, float deltaY) {
 
         super.postTranslate(deltaX, deltaY);
-        for (int i = 0; i < mHighlightViews.size(); i++) {
-            HighlightView hv = mHighlightViews.get(i);
+        for (int i = 0; i < highlightViews.size(); i++) {
+            HighlightView hv = highlightViews.get(i);
             hv.mMatrix.postTranslate(deltaX, deltaY);
             hv.invalidate();
         }
@@ -85,14 +84,14 @@ public class CropImageView extends TouchBaseImageView {
     // hitting cropping rectangle.
     private void recomputeFocus(MotionEvent event) {
 
-        for (int i = 0; i < mHighlightViews.size(); i++) {
-            HighlightView hv = mHighlightViews.get(i);
+        for (int i = 0; i < highlightViews.size(); i++) {
+            HighlightView hv = highlightViews.get(i);
             hv.setFocus(false);
             hv.invalidate();
         }
 
-        for (int i = 0; i < mHighlightViews.size(); i++) {
-            HighlightView hv = mHighlightViews.get(i);
+        for (int i = 0; i < highlightViews.size(); i++) {
+            HighlightView hv = highlightViews.get(i);
             int edge = hv.getHit(event.getX(), event.getY());
             if (edge != HighlightView.GROW_NONE) {
                 if (!hv.hasFocus()) {
@@ -118,15 +117,15 @@ public class CropImageView extends TouchBaseImageView {
                 if (cropImageActivity.mWaitingToPick) {
                     recomputeFocus(event);
                 } else {
-                    for (int i = 0; i < mHighlightViews.size(); i++) {
-                        HighlightView hv = mHighlightViews.get(i);
+                    for (int i = 0; i < highlightViews.size(); i++) {
+                        HighlightView hv = highlightViews.get(i);
                         int edge = hv.getHit(event.getX(), event.getY());
                         if (edge != HighlightView.GROW_NONE) {
                             mMotionEdge = edge;
-                            mMotionHighlightView = hv;
+                            motionHighlightView = hv;
                             mLastX = event.getX();
                             mLastY = event.getY();
-                            mMotionHighlightView.setMode(
+                            motionHighlightView.setMode(
                                     (edge == HighlightView.MOVE)
                                             ? HighlightView.ModifyMode.Move
                                             : HighlightView.ModifyMode.Grow);
@@ -137,33 +136,33 @@ public class CropImageView extends TouchBaseImageView {
                 break;
             case MotionEvent.ACTION_UP:
                 if (cropImageActivity.mWaitingToPick) {
-                    for (int i = 0; i < mHighlightViews.size(); i++) {
-                        HighlightView hv = mHighlightViews.get(i);
+                    for (int i = 0; i < highlightViews.size(); i++) {
+                        HighlightView hv = highlightViews.get(i);
                         if (hv.hasFocus()) {
                             cropImageActivity.mCrop = hv;
-                            for (int j = 0; j < mHighlightViews.size(); j++) {
+                            for (int j = 0; j < highlightViews.size(); j++) {
                                 if (j == i) {
                                     continue;
                                 }
-                                mHighlightViews.get(j).setHidden(true);
+                                highlightViews.get(j).setHidden(true);
                             }
                             centerBasedOnHighlightView(hv);
                             ((CropImageActivity) mContext).mWaitingToPick = false;
                             return true;
                         }
                     }
-                } else if (mMotionHighlightView != null) {
-                    centerBasedOnHighlightView(mMotionHighlightView);
-                    mMotionHighlightView.setMode(
+                } else if (motionHighlightView != null) {
+                    centerBasedOnHighlightView(motionHighlightView);
+                    motionHighlightView.setMode(
                             HighlightView.ModifyMode.None);
                 }
-                mMotionHighlightView = null;
+                motionHighlightView = null;
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (cropImageActivity.mWaitingToPick) {
                     recomputeFocus(event);
-                } else if (mMotionHighlightView != null) {
-                    mMotionHighlightView.handleMotion(mMotionEdge,
+                } else if (motionHighlightView != null) {
+                    motionHighlightView.handleMotion(mMotionEdge,
                             event.getX() - mLastX,
                             event.getY() - mLastY);
                     mLastX = event.getX();
@@ -175,7 +174,7 @@ public class CropImageView extends TouchBaseImageView {
                         // the edge of the screen causes scrolling but it means
                         // that the crop rectangle is no longer fixed under
                         // the user's finger.
-                        ensureVisible(mMotionHighlightView);
+                        ensureVisible(motionHighlightView);
                     }
                 }
                 break;
@@ -204,11 +203,11 @@ public class CropImageView extends TouchBaseImageView {
 
         Rect r = hv.mDrawRect;
 
-        int panDeltaX1 = Math.max(0, mLeft - r.left);
-        int panDeltaX2 = Math.min(0, mRight - r.right);
+        int panDeltaX1 = Math.max(0, getLeft() - r.left);
+        int panDeltaX2 = Math.min(0, getRight() - r.right);
 
-        int panDeltaY1 = Math.max(0, mTop - r.top);
-        int panDeltaY2 = Math.min(0, mBottom - r.bottom);
+        int panDeltaY1 = Math.max(0, getTop() - r.top);
+        int panDeltaY2 = Math.min(0, getBottom() - r.bottom);
 
         int panDeltaX = panDeltaX1 != 0 ? panDeltaX1 : panDeltaX2;
         int panDeltaY = panDeltaY1 != 0 ? panDeltaY1 : panDeltaY2;
@@ -250,14 +249,30 @@ public class CropImageView extends TouchBaseImageView {
     protected void onDraw(Canvas canvas) {
 
         super.onDraw(canvas);
-        for (int i = 0; i < mHighlightViews.size(); i++) {
-            mHighlightViews.get(i).draw(canvas);
+        for (int i = 0; i < highlightViews.size(); i++) {
+            highlightViews.get(i).draw(canvas);
         }
     }
 
     public void add(HighlightView hv) {
 
-        mHighlightViews.add(hv);
+        highlightViews.add(hv);
         invalidate();
+    }
+
+    public ArrayList<HighlightView> getHighlightViews() {
+        return highlightViews;
+    }
+
+    public void setHighlightViews(ArrayList<HighlightView> highlightViews) {
+        this.highlightViews = highlightViews;
+    }
+
+    public HighlightView getMotionHighlightView() {
+        return motionHighlightView;
+    }
+
+    public void setMotionHighlightView(HighlightView motionHighlightView) {
+        this.motionHighlightView = motionHighlightView;
     }
 }
