@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import eu.janmuller.android.simplecropimage.CropImageActivity;
+import eu.janmuller.android.simplecropimage.CropImageSimpleActivity;
 
 import java.io.*;
 
@@ -64,7 +65,7 @@ public class MainActivity extends Activity {
         findViewById(R.id.square_photo_from_take_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cropStyle = CropImageActivity.CropStyle.STANDARD;
+                cropStyle = CropImageActivity.CropStyle.SQUARE;
                 takePicture();
             }
         });
@@ -115,7 +116,7 @@ public class MainActivity extends Activity {
 
     private void startCropImage(CropImageActivity.CropStyle cropStyle) {
 
-        Intent intent = new Intent(this, CropImageActivity.class);
+        Intent intent = new Intent(this, CropImageSimpleActivity.class);
         intent.putExtra(CropImageActivity.IMAGE_PATH, mFileTemp.getPath());
         intent.putExtra(CropImageActivity.SCALE, true);
 

@@ -70,7 +70,7 @@ public class CropImageActivity extends MonitoredActivity {
     private int             mOutputX;
     private int             mOutputY;
     private boolean         mScale;
-    private CropImageView   mImageView;
+    protected CropImageView   mImageView;
     private ContentResolver mContentResolver;
     private Bitmap          mBitmap;
     private String          mImagePath;
@@ -246,7 +246,7 @@ public class CropImageActivity extends MonitoredActivity {
     }
 
 
-    private void startFaceDetection() {
+    protected void startFaceDetection() {
 
         if (isFinishing()) {
             return;
@@ -286,7 +286,7 @@ public class CropImageActivity extends MonitoredActivity {
     }
 
 
-    private void onSaveClicked() throws Exception {
+    protected void onSaveClicked() throws Exception {
         // TODO this code needs to change to use the decode/crop/encode single
         // step api so that we don't require that the whole (possibly large)
         // bitmap doesn't have to be read into memory

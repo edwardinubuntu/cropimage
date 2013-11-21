@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name="eu.janmuller.android.simplecropimage.CropImageActivity" />
+	    <activity android:name="eu.janmuller.android.simplecropimage.CropImageSimpleActivity" />
 
         <provider
             android:name="InternalStorageContentProvider"
