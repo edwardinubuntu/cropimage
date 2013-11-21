@@ -54,11 +54,11 @@ import android.widget.Toast;
 /**
  * The activity can crop specific region of interest from an image.
  */
-public class CropImage extends MonitoredActivity {
+public class CropImageActivity extends MonitoredActivity {
 
     final int IMAGE_MAX_SIZE = 1024;
 
-    private static final String TAG                    = "CropImage";
+    private static final String TAG                    = "CropImageActivity";
     public static final  String IMAGE_PATH             = "image-path";
     public static final  String SCALE                  = "scale";
     public static final  String ORIENTATION_IN_DEGREES = "orientation_in_degrees";
@@ -606,7 +606,7 @@ public class CropImage extends MonitoredActivity {
                     }
 
                     if (mNumFaces > 1) {
-                        Toast.makeText(CropImage.this,
+                        Toast.makeText(CropImageActivity.this,
                                 "Multi face crop help",
                                 Toast.LENGTH_SHORT).show();
                     }

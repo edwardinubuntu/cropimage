@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.janmuller.android.simplecropimage;
+package eu.janmuller.android.simplecropimage.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,11 +25,12 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.widget.ImageView;
+import eu.janmuller.android.simplecropimage.RotateBitmap;
 
-abstract class ImageViewTouchBase extends ImageView {
+public abstract class TouchBaseImageView extends ImageView {
 
     @SuppressWarnings("unused")
-    private static final String TAG = "ImageViewTouchBase";
+    private static final String TAG = "TouchBaseImageView";
 
     // This is the base transformation which is used to show the image
     // initially.  The current computation for this shows the image in
@@ -59,17 +60,17 @@ abstract class ImageViewTouchBase extends ImageView {
 
     int mThisWidth = -1, mThisHeight = -1;
 
-    float mMaxZoom;
+    public float mMaxZoom;
 
-    int mLeft;
+    public int mLeft;
 
-    int mRight;
+    public int mRight;
 
-    int mTop;
+    public int mTop;
 
-    int mBottom;
+    public int mBottom;
 
-    // ImageViewTouchBase will pass a Bitmap to the Recycler if it has finished
+    // TouchBaseImageView will pass a Bitmap to the Recycler if it has finished
     // its use of that Bitmap.
     public interface Recycler {
 
@@ -237,13 +238,13 @@ abstract class ImageViewTouchBase extends ImageView {
         setImageMatrix(getImageViewMatrix());
     }
 
-    public ImageViewTouchBase(Context context) {
+    public TouchBaseImageView(Context context) {
 
         super(context);
         init();
     }
 
-    public ImageViewTouchBase(Context context, AttributeSet attrs) {
+    public TouchBaseImageView(Context context, AttributeSet attrs) {
 
         super(context, attrs);
         init();
