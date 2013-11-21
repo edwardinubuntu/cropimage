@@ -26,7 +26,7 @@ import eu.janmuller.android.simplecropimage.R;
 // overlayed with the image. There are two coordinate spaces in use. One is
 // image, another is screen. computeLayout() uses mMatrix to map from image
 // space to screen space.
-class HighlightView {
+public class HighlightView {
 
     @SuppressWarnings("unused")
     private static final String TAG = "HighlightView";

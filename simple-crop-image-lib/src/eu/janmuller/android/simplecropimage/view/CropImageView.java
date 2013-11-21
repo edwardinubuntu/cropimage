@@ -6,14 +6,13 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import eu.janmuller.android.simplecropimage.CropImageActivity;
-import eu.janmuller.android.simplecropimage.TouchBaseImageView;
 
 import java.util.ArrayList;
 
-class CropImageView extends TouchBaseImageView {
+public class CropImageView extends TouchBaseImageView {
 
-    ArrayList<HighlightView> mHighlightViews      = new ArrayList<HighlightView>();
-    HighlightView            mMotionHighlightView = null;
+    public ArrayList<HighlightView> mHighlightViews      = new ArrayList<HighlightView>();
+    public HighlightView            mMotionHighlightView = null;
     float mLastX, mLastY;
     int mMotionEdge;
 

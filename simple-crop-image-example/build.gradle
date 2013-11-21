@@ -9,7 +9,7 @@ buildscript {
   }
 }
 
-apply plugin: 'android-library'
+apply plugin: 'android'
 
 dependencies {
 }
@@ -40,4 +40,8 @@ android {
       }
     }
   }
+}
+
+dependencies {
+    compile project(':simple-crop-image-lib')
 }

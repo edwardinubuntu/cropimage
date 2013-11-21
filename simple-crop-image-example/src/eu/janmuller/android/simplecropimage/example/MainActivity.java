@@ -18,7 +18,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import eu.janmuller.android.simplecropimage.CropImage;
+import eu.janmuller.android.simplecropimage.CropImageActivity;
 
 public class MainActivity extends Activity {
 
@@ -101,12 +101,12 @@ public class MainActivity extends Activity {
 
     private void startCropImage() {
 
-        Intent intent = new Intent(this, CropImage.class);
-        intent.putExtra(CropImage.IMAGE_PATH, mFileTemp.getPath());
-        intent.putExtra(CropImage.SCALE, true);
+        Intent intent = new Intent(this, CropImageActivity.class);
+        intent.putExtra(CropImageActivity.IMAGE_PATH, mFileTemp.getPath());
+        intent.putExtra(CropImageActivity.SCALE, true);
 
-        intent.putExtra(CropImage.ASPECT_X, 3);
-        intent.putExtra(CropImage.ASPECT_Y, 2);
+        intent.putExtra(CropImageActivity.ASPECT_X, 3);
+        intent.putExtra(CropImageActivity.ASPECT_Y, 2);
 
         startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
     }
@@ -147,7 +147,7 @@ public class MainActivity extends Activity {
                 break;
             case REQUEST_CODE_CROP_IMAGE:
 
-                String path = data.getStringExtra(CropImage.IMAGE_PATH);
+                String path = data.getStringExtra(CropImageActivity.IMAGE_PATH);
                 if (path == null) {
 
                     return;
