@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 import eu.janmuller.android.simplecropimage.view.CropImageView;
 import eu.janmuller.android.simplecropimage.view.HighlightView;
@@ -562,6 +563,16 @@ public class CropImageActivity extends MonitoredActivity {
                     mAspectX != 0 && mAspectY != 0);
 
             mImageView.getHighlightViews().clear(); // Thong added for rotate
+
+            hv.setHighlightViewListener(new HighlightView.HighlightViewListener() {
+                @Override
+                public void growTo(RectF rectF) {
+                    View cropImageTextView = findViewById(R.id.crop_image_info_text_view);
+                    if (cropImageTextView != null && cropImageTextView instanceof TextView) {
+                        ((TextView)cropImageTextView).setText("[ "+(int)rectF.width()+","+(int)rectF.height()+" ]");
+                    }
+                }
+            });
 
             mImageView.add(hv);
         }

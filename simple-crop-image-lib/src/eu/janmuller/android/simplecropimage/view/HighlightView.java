@@ -39,6 +39,8 @@ public class HighlightView {
     public static final int GROW_BOTTOM_EDGE = (1 << 4);
     public static final int MOVE             = (1 << 5);
 
+    public HighlightViewListener highlightViewListener;
+
     public HighlightView(View ctx) {
 
         mContext = ctx;
@@ -381,6 +383,10 @@ public class HighlightView {
         mCropRect.set(r);
         mDrawRect = computeLayout();
         mContext.invalidate();
+
+        if (getHighlightViewListener() != null) {
+            getHighlightViewListener().growTo(mCropRect);
+        }
     }
 
     // Returns the cropping rectangle in image space.
@@ -451,4 +457,16 @@ public class HighlightView {
     private final Paint mFocusPaint   = new Paint();
     private final Paint mNoFocusPaint = new Paint();
     private final Paint mOutlinePaint = new Paint();
+
+    public HighlightViewListener getHighlightViewListener() {
+        return highlightViewListener;
+    }
+
+    public void setHighlightViewListener(HighlightViewListener highlightViewListener) {
+        this.highlightViewListener = highlightViewListener;
+    }
+
+    public interface HighlightViewListener {
+        public void growTo(RectF rectF);
+    }
 }

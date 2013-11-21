@@ -25,8 +25,18 @@
 			android:id="@+id/save"
 			android:layout_width="80dp"
 			android:layout_height="48dp"
-			android:text="@string/save"
+			android:text="@string/save_and_next_button"
 			android:layout_alignParentRight="true"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:id="@+id/crop_image_info_text_view"
+			android:hint="[ width, height ]"
+			android:textColor="#FFFFFF"
+			android:layout_centerVertical="true"
+			android:layout_alignParentLeft="true"/>
 
 	</RelativeLayout>
 </RelativeLayout>
