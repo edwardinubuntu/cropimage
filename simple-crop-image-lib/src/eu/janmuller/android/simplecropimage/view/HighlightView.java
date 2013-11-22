@@ -137,7 +137,9 @@ public class HighlightView {
 			
             canvas.drawPath(path, mOutlinePaint);
 
-            if (mMode == ModifyMode.Grow || isAlwaysDrawResizeIcons()) {
+            // Don't display icons while moving.
+            if (mMode == ModifyMode.Grow ||
+                    (isAlwaysDrawResizeIcons() && mMode != ModifyMode.Move)) {
                 if (mCircle) {
                     int width = mResizeDrawableDiagonal.getIntrinsicWidth();
                     int height = mResizeDrawableDiagonal.getIntrinsicHeight();
