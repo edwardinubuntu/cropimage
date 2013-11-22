@@ -566,7 +566,7 @@ public class CropImageActivity extends MonitoredActivity {
 
             hv.setHighlightViewListener(new HighlightView.HighlightViewListener() {
                 @Override
-                public void growTo(RectF rectF) {
+                public void updateCropInfo(RectF rectF) {
                     View cropImageTextView = findViewById(R.id.crop_image_info_text_view);
                     if (cropImageTextView != null && cropImageTextView instanceof TextView) {
                         ((TextView)cropImageTextView).setText("[ "+(int)rectF.width()+","+(int)rectF.height()+" ]");

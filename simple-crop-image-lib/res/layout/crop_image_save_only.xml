@@ -7,7 +7,7 @@
 	<view
 		class="eu.janmuller.android.simplecropimage.view.CropImageView"
 		android:id="@+id/image"
-		android:background="#55000000"
+		android:background="#000000"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_x="0dip"
@@ -23,8 +23,8 @@
 
 		<Button
 			android:id="@+id/save"
-			android:layout_width="80dp"
-			android:layout_height="48dp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:text="@string/save_and_next_button"
 			android:layout_alignParentRight="true"/>
 

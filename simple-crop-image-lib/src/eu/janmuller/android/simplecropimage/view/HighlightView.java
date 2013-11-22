@@ -300,6 +300,10 @@ public class HighlightView {
             growBy((((edge & GROW_LEFT_EDGE) != 0) ? -1 : 1) * xDelta,
                     (((edge & GROW_TOP_EDGE) != 0) ? -1 : 1) * yDelta);
         }
+
+        if (getHighlightViewListener() != null) {
+            getHighlightViewListener().updateCropInfo(mCropRect);
+        }
     }
 
     // Grows the cropping rectange by (dx, dy) in image space.
@@ -383,10 +387,6 @@ public class HighlightView {
         mCropRect.set(r);
         mDrawRect = computeLayout();
         mContext.invalidate();
-
-        if (getHighlightViewListener() != null) {
-            getHighlightViewListener().growTo(mCropRect);
-        }
     }
 
     // Returns the cropping rectangle in image space.
@@ -467,6 +467,6 @@ public class HighlightView {
     }
 
     public interface HighlightViewListener {
-        public void growTo(RectF rectF);
+        public void updateCropInfo(RectF rectF);
     }
 }
