@@ -123,6 +123,8 @@ public class MainActivity extends Activity {
         intent.putExtra(CropImageActivity.ASPECT_X, 3);
         intent.putExtra(CropImageActivity.ASPECT_Y, 2);
         intent.putExtra(CropImageActivity.CROP_STYLE, cropStyle);
+        intent.putExtra(CropImageActivity.DEBUG, true);
+        intent.putExtra(CropImageActivity.ALWAYS_DRAW_RESIZE_ICONS, true);
 
         startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
     }

@@ -59,6 +59,8 @@ public class CropImageActivity extends MonitoredActivity {
     public static final  String RETURN_DATA_AS_BITMAP  = "data";
     public static final  String ACTION_INLINE_DATA     = "inline-data";
     public static final  String CROP_STYLE = "cropStyle";
+    public static final String DEBUG = "debug";
+    public static final String ALWAYS_DRAW_RESIZE_ICONS = "always-draw-resize-icons";
 
     // These are various options can be specified in the intent.
     protected        Bitmap.CompressFormat mOutputFormat    = Bitmap.CompressFormat.JPEG;
@@ -92,6 +94,10 @@ public class CropImageActivity extends MonitoredActivity {
         STANDARD,
         SQUARE
     }
+
+    private boolean isDebug;
+
+    private boolean isAwaysDrawResizeIcons;
 
     private CropStyle cropStyle = CropStyle.STANDARD;
 
@@ -145,8 +151,13 @@ public class CropImageActivity extends MonitoredActivity {
             }
             if (extras.containsKey(CROP_STYLE) && extras.get(CROP_STYLE) instanceof CropStyle) {
                 setCropStyle((CropStyle)extras.get(CROP_STYLE));
-
                 Log.d(SimpleCropImage.TAG, "Crop Style: " + getCropStyle());
+            }
+            if (extras.containsKey(DEBUG)) {
+                setDebug(extras.getBoolean(DEBUG, false));
+            }
+            if (extras.containsKey(ALWAYS_DRAW_RESIZE_ICONS)) {
+                setAwaysDrawResizeIcons(extras.getBoolean(ALWAYS_DRAW_RESIZE_ICONS, false));
             }
             mOutputX = extras.getInt(OUTPUT_X);
             mOutputY = extras.getInt(OUTPUT_Y);
@@ -486,6 +497,7 @@ public class CropImageActivity extends MonitoredActivity {
             int midY = (int) midPoint.y;
 
             HighlightView hv = new HighlightView(mImageView);
+            hv.setAlwaysDrawResizeIcons(isAwaysDrawResizeIcons());
 
             int width = mBitmap.getWidth();
             int height = mBitmap.getHeight();
@@ -522,6 +534,7 @@ public class CropImageActivity extends MonitoredActivity {
         private void makeDefault() {
 
             HighlightView hv = new HighlightView(mImageView);
+            hv.setAlwaysDrawResizeIcons(isAwaysDrawResizeIcons());
 
             int width = mBitmap.getWidth();
             int height = mBitmap.getHeight();
@@ -564,15 +577,19 @@ public class CropImageActivity extends MonitoredActivity {
 
             mImageView.getHighlightViews().clear(); // Thong added for rotate
 
-            hv.setHighlightViewListener(new HighlightView.HighlightViewListener() {
-                @Override
-                public void updateCropInfo(RectF rectF) {
-                    View cropImageTextView = findViewById(R.id.crop_image_info_text_view);
-                    if (cropImageTextView != null && cropImageTextView instanceof TextView) {
-                        ((TextView)cropImageTextView).setText("[ "+(int)rectF.width()+","+(int)rectF.height()+" ]");
+            if (isDebug()) {
+                hv.setHighlightViewListener(new HighlightView.HighlightViewListener() {
+                    @Override
+                    public void updateCropInfo(RectF rectF) {
+                        View cropImageTextView = findViewById(R.id.crop_image_info_text_view);
+                        if (cropImageTextView != null && cropImageTextView instanceof TextView) {
+                            ((TextView)cropImageTextView).setText("[ "+(int)rectF.width()+","+(int)rectF.height()+" ]");
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                findViewById(R.id.crop_image_info_text_view).setVisibility(View.GONE);
+            }
 
             mImageView.add(hv);
         }
@@ -704,6 +721,22 @@ public class CropImageActivity extends MonitoredActivity {
 
     public void setCropStyle(CropStyle cropStyle) {
         this.cropStyle = cropStyle;
+    }
+
+    public boolean isDebug() {
+        return isDebug;
+    }
+
+    public void setDebug(boolean isDebug) {
+        this.isDebug = isDebug;
+    }
+
+    public boolean isAwaysDrawResizeIcons() {
+        return isAwaysDrawResizeIcons;
+    }
+
+    public void setAwaysDrawResizeIcons(boolean isAwaysDrawResizeIcons) {
+        this.isAwaysDrawResizeIcons = isAwaysDrawResizeIcons;
     }
 }
 

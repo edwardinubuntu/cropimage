@@ -41,6 +41,8 @@ public class HighlightView {
 
     public HighlightViewListener highlightViewListener;
 
+    private boolean alwaysDrawResizeIcons;
+
     public HighlightView(View ctx) {
 
         mContext = ctx;
@@ -128,14 +130,14 @@ public class HighlightView {
 
                 path.addRect(new RectF(mDrawRect), Path.Direction.CW);
             
-		mOutlinePaint.setColor(0xFFFF8A00);    
+		mOutlinePaint.setColor(mContext.getResources().getColor(R.color.crop_outline));
 
             }
             
 			
             canvas.drawPath(path, mOutlinePaint);
 
-            if (mMode == ModifyMode.Grow) {
+            if (mMode == ModifyMode.Grow || isAlwaysDrawResizeIcons()) {
                 if (mCircle) {
                     int width = mResizeDrawableDiagonal.getIntrinsicWidth();
                     int height = mResizeDrawableDiagonal.getIntrinsicHeight();
@@ -468,5 +470,13 @@ public class HighlightView {
 
     public interface HighlightViewListener {
         public void updateCropInfo(RectF rectF);
+    }
+
+    public boolean isAlwaysDrawResizeIcons() {
+        return alwaysDrawResizeIcons;
+    }
+
+    public void setAlwaysDrawResizeIcons(boolean alwaysDrawResizeIcons) {
+        this.alwaysDrawResizeIcons = alwaysDrawResizeIcons;
     }
 }
